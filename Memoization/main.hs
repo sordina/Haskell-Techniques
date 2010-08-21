@@ -28,6 +28,7 @@ g h n = unions . L.map f $ available
     f a = map (L.insertBy compare a) (h (n-a))
     available = L.filter (<= n) divisions
 
+-- http://en.wikibooks.org/wiki/Haskell/Fix_and_recursion
 -- http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/src/Data-Function.html#fix
 fix' :: (a -> a) -> a
 fix' f = let x = f x in x
