@@ -1,5 +1,4 @@
-module Natural (Natural(unNatural), mkNatural)
-where
+module Natural (Natural(unNatural), mkNatural) where
 
 newtype Integral i => Natural i = Natural {unNatural :: i} deriving (Show, Eq, Ord)
 
