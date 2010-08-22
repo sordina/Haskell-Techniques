@@ -31,7 +31,7 @@ g h n = unions . L.map f $ available
 -- http://en.wikibooks.org/wiki/Haskell/Fix_and_recursion
 -- http://haskell.org/ghc/docs/6.12.1/html/libraries/base-4.2.0.0/src/Data-Function.html#fix
 fix' :: (a -> a) -> a
-fix' f = let x = f x in x
+fix' f = let x = f x in x -- or -- f (fix f)
 
 type MFB a b = (a -> b) -> a -> b
 memoFix :: MFB a b -> MFB a b -> a -> b
