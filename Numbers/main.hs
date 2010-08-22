@@ -1,4 +1,6 @@
 import Control.Monad
+import Data.Maybe
+import Debug.Trace
 
 instance Num n => Num (Maybe n)
   where
@@ -14,37 +16,36 @@ instance Fractional (Maybe Rational)
     recip = (>>= \n -> if n == 0 then Nothing else Just (1/n))
 
 newtype Overflowable n = O {stagnant :: Maybe n}
-  deriving (Eq, Show, Ord)
+  deriving (Eq, Show, Ord, Monad) -- Haskell extensions allow generallized diriving of Monad and Num
 
-instance Bounded (Overflowable n)
+instance Bounded n => Bounded (Overflowable n)
   where
-    minBound = undefined
-    maxBound = undefined
+    minBound = O $ Just minBound
+    maxBound = O $ Just maxBound
 
-instance Monad (Overflowable)
+instance (Ord n, Bounded n, Num n) => Num (Overflowable n)
   where
-    -- (Monad m) => m a -> (a -> m b) -> m b
-    --(O Nothing)  >>= f = O Nothing
-    --(O (Just a)) >>= f = O (Just (f a))
-    (>>=) = undefined
-    return n = O (Just n)
-    --return = undefined
+    a + b         = if (a > maxBound - b) || (a < minBound + b) -- TODO: think more about the overflow cases
+                     then O Nothing
+                     else liftM2 (+) a b
 
-instance (Num n, Bounded n) => Num (Overflowable n)
-  where
-    (+)         = liftM2 (+)
-    (*)         = liftM2 (*)
-    abs         = liftM abs
-    signum      = liftM signum
-    fromInteger = O . Just . fromInteger
+    (*)           = liftM2 (*)
+    fromInteger   = O . Just . fromInteger
+    abs           = liftM abs
+    signum        = liftM signum
+
+
+-- Show off the new ideas
 
 a = Nothing
 b = Just 2
 c = Just 5
 
-d :: Maybe Rational
-d = b / c
+d = b / c :: Maybe Rational
 e = Just 0
 f = d * c / e
+
+g = 10^5 :: Overflowable Int
+h = take 20 $ iterate (+g) g
 
 main = mapM_ print [ a, b, c, d, a + b, b * c, c / d, f ]
