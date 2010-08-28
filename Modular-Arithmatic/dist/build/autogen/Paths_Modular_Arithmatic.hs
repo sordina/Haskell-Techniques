@@ -8,13 +8,13 @@ import Data.Version (Version(..))
 import System.Environment (getEnv)
 
 version :: Version
-version = Version {versionBranch = [0,1], versionTags = []}
+version = Version {versionBranch = [0,1,1], versionTags = []}
 
 bindir, libdir, datadir, libexecdir :: FilePath
 
 bindir     = "/Users/lyndon/.cabal/bin"
-libdir     = "/Users/lyndon/.cabal/lib/Modular-Arithmatic-0.1/ghc-6.12.3"
-datadir    = "/Users/lyndon/.cabal/share/Modular-Arithmatic-0.1"
+libdir     = "/Users/lyndon/.cabal/lib/Modular-Arithmatic-0.1.1/ghc-6.12.3"
+datadir    = "/Users/lyndon/.cabal/share/Modular-Arithmatic-0.1.1"
 libexecdir = "/Users/lyndon/.cabal/libexec"
 
 getBinDir, getLibDir, getDataDir, getLibexecDir :: IO FilePath
